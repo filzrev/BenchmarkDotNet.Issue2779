@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "BenchmarkDotNet.Issue2779": {
+      "commandName": "Project",
+      "commandLineArgs": "",
+      "workingDirectory": ".",
+      "environmentVariables": {
+      }
+    }
+  }
+}

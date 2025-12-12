@@ -1,0 +1,93 @@
+name: run-tests
+run-name: Run selected tests (${{ inputs.runs_on }} -c ${{ inputs.configuration}} --framework ${{ inputs.targetFramework}})
+on:
+  workflow_dispatch:
+    inputs:
+      runs_on:
+        type: choice
+        description: GitHub Actions runner image name
+        required: true
+        default: macos-latest
+        options:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+          - macos-15-intel
+      configuration:
+        type: choice
+        description: Select Configulation
+        required: true
+        default: Release
+        options:
+          - Debug
+          - Release
+      targetFramework:
+        type: choice
+        description: Select TargetFramework
+        required: true
+        default: net8.0
+        options:
+          - net8.0
+          - net10.0
+      iterationCount:
+        type: number
+        description: Count of test loop (It's expected to be used for flaky tests)
+        required: true
+        default: 1
+
+jobs:
+  test:
+    name: test (${{ inputs.runs_on }} --framework ${{ inputs.framework}}
+    runs-on: ${{ inputs.runs_on }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v6
+      
+      # Install dotnet-gcdump
+      - name: Install dotnet-gcdump
+        run: |
+          dotnet tool install dotnet-gcdump -g
+      
+      # Setup
+      - name: Setup
+        run: |
+          mkdir artifacts
+
+      # Build
+      - name: Run build
+        run: |
+          dotnet build -c ${{ inputs.configuration }}
+
+      # Test
+      - name: Run tests
+        shell: pwsh
+        working-directory: BenchmarkDotNet.Issue2779
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          $iterationCount = ${{ inputs.iterationCount }}
+
+          foreach($i in 1..$iterationCount) {
+            Write-Output ('##[group]Executing Iteration: {0}/${{ inputs.iterationCount }}' -f $i)
+            
+            try
+            {
+              dotnet run -c ${{ inputs.configuration }} -f ${{ inputs.targetFramework }}  --no-build --logger "console;verbosity=normal"
+            }
+            catch
+            {
+              Write-Output ('::error title=Failed to run benchmark::Failed at ({0}/{1})' -f $i, $iterationCount)
+              throw
+            }
+            Write-Output '##[endgroup]'
+          }
+
+      # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
+      - name: Upload test results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: results
+          if-no-files-found: ignore
+          path: |
+            artifacts/**/*
+            **/*.gcdump

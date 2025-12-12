@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="BenchmarkDotNet.Issue2779/BenchmarkDotNet.Issue2779.csproj" />
+</Solution>
