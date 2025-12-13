@@ -6,42 +6,42 @@ namespace BenchmarkDotNet.Issue2779;
 
 public class Benchmarks
 {
-    ////private void GcDump(string key)
-    ////{
-    ////    int pid = Environment.ProcessId;
-    ////    var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+    private void GcDump(string key)
+    {
+        int pid = Environment.ProcessId;
+        var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
 
-    ////    if (workspace == null)
-    ////    {
-    ////        workspace = Path.Combine(Path.GetTempPath(), "BenchmarkDotNet_GcDump");
-    ////        Directory.CreateDirectory($"{workspace}/artifacts");
-    ////    }
+        if (workspace == null)
+        {
+            workspace = Path.Combine(Path.GetTempPath(), "BenchmarkDotNet_GcDump");
+            Directory.CreateDirectory($"{workspace}/artifacts");
+        }
 
-    ////    string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}_{key}.gcdump";
+        string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}_{key}.gcdump";
 
-    ////    var process = Process.Start(new ProcessStartInfo("dotnet", $"gcdump collect -p {pid} --output {outputPath}")
-    ////    {
-    ////        CreateNoWindow = false,
-    ////        UseShellExecute = false,
-    ////        RedirectStandardOutput = true,
-    ////    })!;
-    ////    var stdout = process.StandardOutput.ReadToEnd();
-    ////    process.WaitForExit();
-    ////    Console.WriteLine(stdout);
-    ////}
+        var process = Process.Start(new ProcessStartInfo("dotnet", $"gcdump collect -p {pid} --output {outputPath}")
+        {
+            CreateNoWindow = false,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+        })!;
+        var stdout = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+        Console.WriteLine(stdout);
+    }
 
-    ////[IterationSetup]
-    ////public void IterationSetup()
-    ////{
-    ////    GcDump("warmup");
-    ////    GcDump("setup");
-    ////}
+    [IterationSetup]
+    public void IterationSetup()
+    {
+        GcDump("warmup");
+        GcDump("setup");
+    }
 
-    ////[IterationCleanup]
-    ////public void IterationCleanup()
-    ////{
-    ////    GcDump("cleanup");
-    ////}
+    [IterationCleanup]
+    public void IterationCleanup()
+    {
+        GcDump("cleanup");
+    }
 
     [Benchmark]
     public byte[] SixtyFourBytesArray()
