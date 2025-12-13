@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE.txt" />
+    <File Path="NuGet.config" />
     <File Path="README.md" />
   </Folder>
   <Project Path="BenchmarkDotNet.Issue2779/BenchmarkDotNet.Issue2779.csproj" />
