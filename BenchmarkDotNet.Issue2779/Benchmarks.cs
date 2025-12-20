@@ -30,18 +30,19 @@ public class Benchmarks
         Console.WriteLine(stdout);
     }
 
-    [IterationSetup]
-    public void IterationSetup()
-    {
-        GcDump("warmup");
-        GcDump("setup");
-    }
+    // Comment out because it might affects results.
+    ////[IterationSetup]
+    ////public void IterationSetup()
+    ////{
+    ////    GcDump("warmup");
+    ////    GcDump("setup");
+    ////}
 
-    [IterationCleanup]
-    public void IterationCleanup()
-    {
-        GcDump("cleanup");
-    }
+    ////[IterationCleanup]
+    ////public void IterationCleanup()
+    ////{
+    ////    GcDump("cleanup");
+    ////}
 
     [Benchmark]
     public byte[] SixtyFourBytesArray()
