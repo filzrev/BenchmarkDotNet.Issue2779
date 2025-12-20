@@ -25,7 +25,7 @@ internal class Program
         // 3. long arraySizeOverhead = IntPtr.Size;            // 8 byte (array length)
         // Total: 88 bytes
 
-        AssertAllocations(CsProjCoreToolchain.NetCoreApp10_0, warmupCount: 1, expectedAllocationBytes: 88);
+        AssertAllocations(CsProjCoreToolchain.NetCoreApp10_0, warmupCount: 0, expectedAllocationBytes: 88);
     }
 
     private static void AssertAllocations(IToolchain toolchain, int warmupCount, int expectedAllocationBytes)
