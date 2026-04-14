@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" Version="9.3.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.16.0-nightly.20260322.472" />
+    <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
   </ItemGroup>
 
 </Project>
